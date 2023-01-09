@@ -1,7 +1,7 @@
 /** Grammars always start with a grammar header. This grammar is called
  *  ArrayInit and must match the filename: ArrayInit.g4
  */
-grammar GrammarLang;
+grammar GLang;
 
 /** A rule called init that matches comma-separated values between {...}. */
 init  : '{' value (',' value)* '}' ;  // must match at least one value
