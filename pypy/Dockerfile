@@ -9,7 +9,7 @@ WORKDIR "/home/user"
 USER user:user
 
 RUN curl https://foss.heptapod.net/pypy/pypy/-/archive/branch/default/pypy-branch-default.tar.bz2 | tar -xjf -
-COPY *.json *.py .
+COPY *.json *.py ./
 
 RUN pypy pypy-branch-default/rpython/bin/rpython grammar_compiler_rpy.py
 
