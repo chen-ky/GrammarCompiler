@@ -7,7 +7,6 @@ STDERR_FD = 2
 
 def print_(string, end="\n"):
     os.write(STDOUT_FD, ("%s%s" % (string, end)))
-    # os.write(STDOUT_FD, ("%s%s" % (string, end)).encode("utf-8"))
 
 
 def println(string):
