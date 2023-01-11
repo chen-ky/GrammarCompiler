@@ -1,0 +1,4 @@
+# Ignore pypy hg repo directory
+pypy
+# RPython output binary
+*-c
