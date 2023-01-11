@@ -1,0 +1,16 @@
+data/kermit/__init__.py.i
+data/kermit/grammar.txt.i
+data/kermit/sourceparser.py.i
+data/kermit/test/__init__.py.i
+data/kermit/test/test_jit.py.i
+data/.hgignore.i
+data/kermit/conftest.py.i
+data/kermit/test/test_compiler.py.i
+data/samples/hello.ker.i
+data/targetkermit.py.i
+data/kermit/bytecode.py.i
+data/kermit/interpreter.py.i
+data/kermit/test/test_parser.py.i
+data/.hgtags.i
+data/kermit/test/test_interpreter.py.i
+data/README.i
