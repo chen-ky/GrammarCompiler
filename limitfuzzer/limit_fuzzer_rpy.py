@@ -114,7 +114,7 @@ class LimitFuzzer_NR(LimitFuzzer):
 
     def _get_def(self, t):
         if self.is_nt(t):
-            return [t, None]
+            return [t, [None]]
         else:
             return [t, []]
 
@@ -134,13 +134,13 @@ class LimitFuzzer_NR(LimitFuzzer):
                     grammars.append(r)
             cheap_grammar[k] = grammars
 
-        root = [key, None]
+        root = [key, [None]]
         queue = [(0, root)]
         while queue:
             # get one item to expand from the queue
             (depth, item) = queue.pop(0)
             key = item[0]
-            if item[1] is not None:
+            if item[1] != [None]:
                 continue
             grammar = cheap_grammar
             if depth < max_depth:
@@ -148,6 +148,7 @@ class LimitFuzzer_NR(LimitFuzzer):
             chosen_rule = random.choice(grammar[key])
             expansion = []
             for t in chosen_rule:
+                # print self._get_def(t)
                 expansion.append(self._get_def(t))
             item[1] = expansion
             for t in expansion:

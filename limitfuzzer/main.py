@@ -1,11 +1,11 @@
 import sys
 from grammar import grammar
-from limit_fuzzer_rpy import LimitFuzzer
+from limit_fuzzer_rpy import LimitFuzzer_NR
 from utils import print_
 
 
 def entry_point(argv):
-    fuzzer = LimitFuzzer(grammar)
+    fuzzer = LimitFuzzer_NR(grammar)
     print_(fuzzer.fuzz(), end="")
     return 0
 
