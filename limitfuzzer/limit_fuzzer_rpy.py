@@ -1,6 +1,9 @@
 import os
+from rpython.rlib.rarithmetic import UINT_MAX
 from utils.random import random
-from utils import StrSet, TupleSorter
+from utils import StrSet, TupleSorter, max_, min_
+
+INF = UINT_MAX  # Hack for float("inf") not working in RPython
 
 
 class Fuzzer(object):
@@ -25,15 +28,15 @@ class LimitFuzzer(Fuzzer):
         if symbol in self.key_cost:
             return self.key_cost[symbol]
         if symbol in seen.get():
-            self.key_cost[symbol] = float('inf')
-            return float('inf')
+            self.key_cost[symbol] = INF
+            return INF
         expansion_costs = []
         for rule in grammar.get(symbol, []):
             expansion_costs.append(self.expansion_cost(grammar, rule, seen.union(StrSet(symbol))))
         if len(expansion_costs) == 0:
             v = 0
         else:
-            v = min(expansion_costs)
+            v = min_(expansion_costs)
         self.key_cost[symbol] = v
         return v
 
@@ -42,7 +45,7 @@ class LimitFuzzer(Fuzzer):
         for token in tokens:
             if token in grammar:
                 symbol_costs.append(self.symbol_cost(grammar, token, seen))
-        return max(symbol_costs) + 1
+        return max_(symbol_costs) + 1
 
     def gen_key(self, key, depth, max_depth):
         if key not in self.grammar:

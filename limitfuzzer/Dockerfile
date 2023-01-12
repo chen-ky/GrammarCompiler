@@ -9,9 +9,9 @@ WORKDIR "/home/user"
 USER user:user
 
 RUN hg clone https://foss.heptapod.net/pypy/pypy
-COPY utils ./utils
-COPY *.json *.py ./
+COPY --chown=user:user utils ./utils
+COPY --chown=user:user *.json *.py ./
 
-RUN PYTHONPATH=pypy pypy ./pypy/rpython/bin/rpython main.py
+RUN PYTHONPATH=pypy pypy ./pypy/rpython/bin/rpython --output limit-fuzzer main.py
 
-ENTRYPOINT ["/home/user/main-c"]
+ENTRYPOINT ["/home/user/limit-fuzzer"]
