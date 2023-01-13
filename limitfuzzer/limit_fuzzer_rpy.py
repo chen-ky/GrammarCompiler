@@ -117,9 +117,9 @@ class LimitFuzzer_NR(LimitFuzzer):
 
     def _get_def(self, t):
         if self.is_nt(t):
-            return [t, [None]]
+            return (t, [("", [])])
         else:
-            return [t, []]
+            return (t, [])
 
     def gen_key(self, key, max_depth):
         cheap_grammar = {}
@@ -129,7 +129,7 @@ class LimitFuzzer_NR(LimitFuzzer):
             costs = []
             for r in rules:
                 costs.append(self.cost[k][str(r)])
-            min_cost = min(costs)
+            min_cost = min_(costs)
             # grammar[k] = [r for r in grammar[k] if self.cost[k][str(r)] == float('inf')]
             grammars = []
             for r in self.grammar[k]:
@@ -137,25 +137,30 @@ class LimitFuzzer_NR(LimitFuzzer):
                     grammars.append(r)
             cheap_grammar[k] = grammars
 
-        root = [key, [None]]
+        root = (key, [("", [])])
         queue = [(0, root)]
         while queue:
             # get one item to expand from the queue
             (depth, item) = queue.pop(0)
             key = item[0]
-            if item[1] != [None]:
+            if item[1] != [("", [])]:
                 continue
             grammar = cheap_grammar
             if depth < max_depth:
                 grammar = self.grammar
             chosen_rule = self.rand.choice(grammar[key])
-            expansion = []
+
+            # Clear the list
+            i = 0
+            while i < len(item[1]):
+                item[1].pop()
+                i += 1
+
+            expansion = item[1]
             for t in chosen_rule:
-                # print self._get_def(t)
-                expansion.append(self._get_def(t))
-            item[1] = expansion
-            for t in expansion:
-                queue.append((depth+1, t))
+                sub_t = self._get_def(t)
+                expansion.append(sub_t)
+                queue.append((depth+1, sub_t))
             # print("Fuzz: %s" % key, len(queue), file=sys.stderr)
         # print(file=sys.stderr)
         return root

@@ -5,7 +5,7 @@ from utils import print_
 
 
 def entry_point(argv):
-    fuzzer = LimitFuzzer(grammar)
+    fuzzer = LimitFuzzer_NR(grammar)
     print_(fuzzer.fuzz(), end="")
     return 0
 
