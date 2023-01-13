@@ -1,16 +1,12 @@
 from rpython.rlib.rrandom import Random
-from rpython.rlib.rarithmetic import r_uint32, r_ulonglong, r_int
-import time
+from rpython.rlib.rarithmetic import r_uint32, r_uint
 
-_TIMESTAMP_MULTIPLIER = 1000000
 UINT32_MIN = 0
 UINT32_MAX = 4294967295
 
 
 class RRandom(object):
-    def __init__(self, seed=None):
-        if seed is None:
-            seed = r_ulonglong(time.time() * _TIMESTAMP_MULTIPLIER)
+    def __init__(self, seed):
         self._rng = Random(seed)
 
     def random(self):
@@ -31,7 +27,7 @@ class RRandom(object):
         u32_rand_num = self._rng.genrand32()
         while u32_rand_num > max_num:
             u32_rand_num = self._rng.genrand32()
-        rand_num = r_int(u32_rand_num % num_items)
+        rand_num = r_uint(u32_rand_num % num_items)
         return rand_num + start
 
     def randint(self, a, b):
@@ -41,7 +37,3 @@ class RRandom(object):
     def choice(self, seq):
         idx = self.randrange(0, len(seq))
         return seq[idx]
-
-
-# Initialise a new instance on import
-random = RRandom()

@@ -1,10 +1,11 @@
 import os
-from rpython.rlib.rarithmetic import UINT_MAX
-from utils.random import random
+from rpython.rlib.rarithmetic import UINT_MAX, r_ulonglong
+from utils.random import RRandom
 from utils import StrSet, TupleSorter, max_, min_
+import time
 
 INF = UINT_MAX  # Hack for float("inf") not working in RPython
-
+TIMESTAMP_MULTIPLIER = 1000000  # To make time.time() an integer
 
 class Fuzzer(object):
     def __init__(self, grammar):
@@ -21,6 +22,7 @@ class LimitFuzzer(Fuzzer):
         self.grammar = grammar
         self.system_name = os.uname()[0]  # expect "Darwin" and "Linux"
 
+        self.rand = RRandom(r_ulonglong(time.time() * TIMESTAMP_MULTIPLIER))
         self.key_cost = {}
         self.cost = self.compute_cost(grammar)
 
@@ -61,7 +63,7 @@ class LimitFuzzer(Fuzzer):
                     rules.append(r)
         else:
             rules = self.grammar[key]
-        result = self.gen_rule(random.choice(rules), depth+1, max_depth)
+        result = self.gen_rule(self.rand.choice(rules), depth+1, max_depth)
         return result
 
     def gen_rule(self, rule, depth, max_depth):
@@ -90,6 +92,7 @@ class LimitFuzzer_NR(LimitFuzzer):
         self.grammar = grammar
         self.system_name = os.uname()[0]  # expect "Darwin" and "Linux"
 
+        self.rand = RRandom(r_ulonglong(time.time() * TIMESTAMP_MULTIPLIER))
         self.key_cost = {}
         self.cost = self.compute_cost(grammar)
 
@@ -145,7 +148,7 @@ class LimitFuzzer_NR(LimitFuzzer):
             grammar = cheap_grammar
             if depth < max_depth:
                 grammar = self.grammar
-            chosen_rule = random.choice(grammar[key])
+            chosen_rule = self.rand.choice(grammar[key])
             expansion = []
             for t in chosen_rule:
                 # print self._get_def(t)
