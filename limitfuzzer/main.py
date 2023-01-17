@@ -1,12 +1,14 @@
 import sys
 from grammar import grammar
 from limit_fuzzer_rpy import LimitFuzzer_NR, LimitFuzzer
-from utils import print_
+from utils import write_bytes_to_stdout, print_
 
 
 def entry_point(argv):
     fuzzer = LimitFuzzer_NR(grammar)
-    print_(fuzzer.fuzz(), end="")
+    fuzz_result = fuzzer.fuzz()
+    write_bytes_to_stdout(fuzz_result)
+    # print_(fuzz_result, end="")
     return 0
 
 
