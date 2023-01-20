@@ -1,5 +1,9 @@
 Re-creation of bf at https://morepypy.blogspot.com/2011/04/tutorial-writing-interpreter-with-pypy.html and https://github.com/disjukr/pypy-tutorial-ko
 
+## Running with a Python interpreter outside a container
+1. Run `setup_dev.sh` if this is the first time you are running this.
+2. Run `PYTHONPATH=pypy <pypy | python2> main.py <.b source file>`
+
 ## Build with container
 You can rebuild or manually copy the .b program whenever you make changes.
 
