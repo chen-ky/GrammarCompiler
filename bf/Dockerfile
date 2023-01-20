@@ -1,0 +1,18 @@
+FROM docker.io/library/fedora:latest
+
+RUN dnf update -y \
+    && dnf install -y gcc python2 pypy mercurial libffi-devel
+
+RUN useradd -m -U user
+
+WORKDIR "/home/user"
+USER user:user
+
+RUN hg clone https://foss.heptapod.net/pypy/pypy
+COPY --chown=user:user *.py ./
+
+RUN PYTHONPATH=pypy pypy ./pypy/rpython/bin/rpython --opt=jit --output bf main.py
+
+COPY --chown=user:user *.b ./
+
+ENTRYPOINT ["/home/user/bf"]
