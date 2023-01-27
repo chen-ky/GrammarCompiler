@@ -1,14 +1,15 @@
 import os
 from rpython.rlib.rarithmetic import UINT_MAX, r_ulonglong
-from utils.random import RRandom
+from utils.random import RRandom, StdInRandom
 from utils import StrSet, TupleSorter, max_, min_
 import time
 
 INF = UINT_MAX  # Hack for float("inf") not working in RPython
 TIMESTAMP_MULTIPLIER = 1000000  # To make time.time() an integer
 
+
 class Fuzzer(object):
-    def __init__(self, grammar):
+    def __init__(self, grammar, rand_from_stdin=False):
         self.grammar = grammar
         self.system_name = os.uname()[0]  # expect "Darwin" and "Linux"
 
@@ -17,12 +18,15 @@ class Fuzzer(object):
 
 
 class LimitFuzzer(Fuzzer):
-    def __init__(self, grammar):
+    def __init__(self, grammar, rand_from_stdin=False):
         # super(LimitFuzzer, self).__init__(grammar)
         self.grammar = grammar
         self.system_name = os.uname()[0]  # expect "Darwin" and "Linux"
 
-        self.rand = RRandom(r_ulonglong(time.time() * TIMESTAMP_MULTIPLIER))
+        if rand_from_stdin:
+            self.rand = StdInRandom()
+        else:
+            self.rand = RRandom(r_ulonglong(time.time() * TIMESTAMP_MULTIPLIER))
         self.key_cost = {}
         self.cost = self.compute_cost(grammar)
 
@@ -87,12 +91,15 @@ class LimitFuzzer(Fuzzer):
 # A non recursive version.
 class LimitFuzzer_NR(LimitFuzzer):
 
-    def __init__(self, grammar):
+    def __init__(self, grammar, rand_from_stdin=False):
         # super(LimitFuzzer_NR, self).__init__(grammar)
         self.grammar = grammar
         self.system_name = os.uname()[0]  # expect "Darwin" and "Linux"
 
-        self.rand = RRandom(r_ulonglong(time.time() * TIMESTAMP_MULTIPLIER))
+        if rand_from_stdin:
+            self.rand = StdInRandom()
+        else:
+            self.rand = RRandom(r_ulonglong(time.time() * TIMESTAMP_MULTIPLIER))
         self.key_cost = {}
         self.cost = self.compute_cost(grammar)
 
@@ -124,7 +131,7 @@ class LimitFuzzer_NR(LimitFuzzer):
         else:
             return (t, [])
 
-    def gen_key(self, key, max_depth):
+    def gen_key(self, key, depth, max_depth):
         cheap_grammar = {}
         for k in self.cost:
             # should we minimize it here? We simply avoid infinities
@@ -141,15 +148,15 @@ class LimitFuzzer_NR(LimitFuzzer):
             cheap_grammar[k] = grammars
 
         root = (key, [("", [])])
-        queue = [(0, root)]
+        queue = [(depth, root)]
         while queue:
             # get one item to expand from the queue
-            (depth, item) = queue.pop(0)
+            (item_depth, item) = queue.pop(0)
             key = item[0]
             if item[1] != [("", [])]:
                 continue
             grammar = cheap_grammar
-            if depth < max_depth:
+            if item_depth < max_depth:
                 grammar = self.grammar
             chosen_rule = self.rand.choice(grammar[key])
 
@@ -163,10 +170,10 @@ class LimitFuzzer_NR(LimitFuzzer):
             for t in chosen_rule:
                 sub_t = self._get_def(t)
                 expansion.append(sub_t)
-                queue.append((depth+1, sub_t))
+                queue.append((item_depth+1, sub_t))
             # print("Fuzz: %s" % key, len(queue), file=sys.stderr)
         # print(file=sys.stderr)
         return root
 
     def fuzz(self, key='<start>', max_depth=10):
-        return self.tree_to_str(self.gen_key(key=key, max_depth=max_depth))
+        return self.tree_to_str(self.gen_key(key=key, depth=0, max_depth=max_depth))
