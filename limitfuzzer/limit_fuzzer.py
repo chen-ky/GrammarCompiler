@@ -5,7 +5,7 @@ class Fuzzer:
     def __init__(self, grammar):
         self.grammar = grammar
         self.system_name = os.uname().sysname # expect "Darwin" and "Linux"
-    
+
     def fuzz(self, key='<start>', max_num=None, max_depth=None):
         raise NotImplemented()
 
@@ -47,7 +47,7 @@ class LimitFuzzer(LimitFuzzer):
         super().__init__(grammar)
         self.key_cost = {}
         self.cost = self.compute_cost(grammar)
- 
+
     def compute_cost(self, grammar):
         cost = {}
         for k in grammar:
@@ -56,17 +56,20 @@ class LimitFuzzer(LimitFuzzer):
                 cost[k][str(rule)] = self.expansion_cost(grammar, rule, set())  
         return cost
 
-    
+
 # A non recursive version.
 class LimitFuzzer_NR(LimitFuzzer):
     def is_nt(self, name):
-        return (name[0], name[-1]) == ('<', '>')
- 
+        if len(name) > 1:
+            return (name[0], name[-1]) == ('<', '>')
+        else:
+            return False
+
     def tree_to_str(self, tree):
         name, children = tree
         if not self.is_nt(name): return name
         return ''.join([self.tree_to_str(c) for c in children])
- 
+
     def nonterminals(self, rule):
         return [t for t in rule if self.is_nt(t)]
 
