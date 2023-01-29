@@ -17,13 +17,13 @@
 #     "<newline>": [["\n"]]
 # }
 
-
+import string
 # JSON
 # Generate <character> rule
 json_character_rule = []
 json_character_exclude = [
-    0x22,  # " char
-    0x5c  # \ char
+    "\"",  # " char
+    "\\"  # \ char
 ]
 
 # UTF-8 uses variable length encoding
@@ -31,41 +31,41 @@ json_character_exclude = [
 # See "ASCII Transparency" description for number of bytes character
 # range are encoded with
 # Also, http://www.adamponting.com/utf-8-1-and-2-byte-codes/ for the unicode to hex range
-for c in range(0x20, 0x7f + 1):
+for c in string.ascii_letters:
     if c not in json_character_exclude:
-        b_array = bytearray(1)
-        b_array[0] = c
-        json_character_rule.append([b_array])
+        # b_array = bytearray(1)
+        # b_array[0] = c
+        json_character_rule.append([c])
 
-for c in range(0xc000, 0xdfff + 1):
-    b_array = bytearray(2)
-    if c not in json_character_exclude:
-        i = 0
-        while i < len(b_array):
-            b_array[-(i + 1)] = c % 256  # Populate byte from behind
-            c = c // 256
-            i += 1
-        json_character_rule.append([b_array])
+# for c in range(0xc000, 0xdfff + 1):
+#     b_array = bytearray(2)
+#     if c not in json_character_exclude:
+#         i = 0
+#         while i < len(b_array):
+#             b_array[-(i + 1)] = c % 256  # Populate byte from behind
+#             c = c // 256
+#             i += 1
+#         json_character_rule.append([b_array])
 
-for c in range(0xe00000, 0xefffff + 1):
-    b_array = bytearray(3)
-    if c not in json_character_exclude:
-        i = 0
-        while i < len(b_array):
-            b_array[-(i + 1)] = c % 256  # Populate byte from behind
-            c = c // 256
-            i += 1
-        json_character_rule.append([b_array])
+# for c in range(0xe00000, 0xefffff + 1):
+#     b_array = bytearray(3)
+#     if c not in json_character_exclude:
+#         i = 0
+#         while i < len(b_array):
+#             b_array[-(i + 1)] = c % 256  # Populate byte from behind
+#             c = c // 256
+#             i += 1
+#         json_character_rule.append([b_array])
 
-for c in range(0xf0000000, 0xffffffff + 1):
-    b_array = bytearray(4)
-    if c not in json_character_exclude:
-        i = 0
-        while i < len(b_array):
-            b_array[-(i + 1)] = c % 256  # Populate byte from behind
-            c = c // 256
-            i += 1
-        json_character_rule.append([b_array])
+# for c in range(0xf0000000, 0xffffffff + 1):
+#     b_array = bytearray(4)
+#     if c not in json_character_exclude:
+#         i = 0
+#         while i < len(b_array):
+#             b_array[-(i + 1)] = c % 256  # Populate byte from behind
+#             c = c // 256
+#             i += 1
+#         json_character_rule.append([b_array])
 
 json_character_rule.append(["\\", "<escape>"])
 
