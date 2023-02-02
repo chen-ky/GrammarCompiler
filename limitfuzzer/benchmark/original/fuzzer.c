@@ -41,20 +41,20 @@ void gen_symbol_1_1(int depth);
 void gen_character_1(int depth);
 void gen_digit_1(int depth);
 
-const char* pool_start[] =  {"false", "null", "true"};
-const int pool_l_start[] =  {5, 4, 4};
+const char* pool_start[] =  {"null", "true", "false"};
+const int pool_l_start[] =  {4, 4, 5};
         
 
 const char* pool_json[] =  {"true", "false", "null"};
 const int pool_l_json[] =  {4, 5, 4};
         
 
-const char* pool_element[] =  {"false", "true", "null"};
-const int pool_l_element[] =  {5, 4, 4};
+const char* pool_element[] =  {"null", "true", "false"};
+const int pool_l_element[] =  {4, 4, 5};
         
 
-const char* pool_value[] =  {"true", "null", "false"};
-const int pool_l_value[] =  {4, 4, 5};
+const char* pool_value[] =  {"null", "false", "true"};
+const int pool_l_value[] =  {4, 5, 4};
         
 
 const char* pool_object[] =  {"{}"};
@@ -65,7 +65,7 @@ const char* pool_members[] =  {"\"\":null", "\"\":true", "\"\":false"};
 const int pool_l_members[] =  {7, 7, 8};
         
 
-const char* pool_member[] =  {"\"\":null", "\"\":true", "\"\":false"};
+const char* pool_member[] =  {"\"\":true", "\"\":null", "\"\":false"};
 const int pool_l_member[] =  {7, 7, 8};
         
 
@@ -73,7 +73,7 @@ const char* pool_array[] =  {"[]"};
 const int pool_l_array[] =  {2};
         
 
-const char* pool_elements[] =  {"true", "false", "null"};
+const char* pool_elements[] =  {"null", "false", "true"};
 const int pool_l_elements[] =  {4, 5, 4};
         
 
@@ -85,15 +85,15 @@ const char* pool_characters[] =  {""};
 const int pool_l_characters[] =  {0};
         
 
-const char* pool_character[] =  {"W", "e", "T", "t", "M", "7", "d", "y", "Y", "|", " ", "%", "}", "?", "D", "i", "Q", "E", "o", "1", "@", "p", "^", "J", "u", "#", "8", "k", "v", "P", "*", "/", "s", "5", "$", "O", "9", "I", "X", "r", "[", "&", "z", "Z", ".", ":", "C", "!", "6", "(", "{", "<", "3", "-", "+", "=", "c", "4", "L", "H", "g", "N", "x", "G", ";", "b", "`", "m", "0", "w", "2", "'", "U", "A", "l", "a", "V", "h", ")", "j", ",", "~", "f", "B", "F", ">", "K", "_", "n", "q", "R", "S", "]"};
+const char* pool_character[] =  {"u", "{", "z", "3", ":", "m", "U", "b", "0", "y", "!", "g", "[", "X", "j", "(", "|", "'", "f", "t", "8", "}", "k", "c", "P", "L", "l", "G", "5", "@", "/", "`", ")", "?", "2", "a", "-", "+", "Z", "F", "D", "q", "w", "M", "o", "i", "7", "E", "s", "1", "r", "#", "B", "O", "*", "]", "6", "R", "h", "<", "K", "T", "p", "S", "=", ";", "9", ".", ",", "Y", "v", "N", ">", "~", "V", "C", "$", "A", "_", "I", "e", "%", "^", "H", "Q", " ", "x", "n", "W", "J", "d", "4", "&"};
 const int pool_l_character[] =  {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
         
 
-const char* pool_esc[] =  {"\\f", "\\\"", "\\b", "\\n", "\\\\", "\\r", "\\t"};
+const char* pool_esc[] =  {"\\b", "\\r", "\\f", "\\\"", "\\t", "\\n", "\\\\"};
 const int pool_l_esc[] =  {2, 2, 2, 2, 2, 2, 2};
         
 
-const char* pool_escc[] =  {"t", "\\", "r", "\"", "b", "f", "n"};
+const char* pool_escc[] =  {"b", "t", "n", "r", "\\", "f", "\""};
 const int pool_l_escc[] =  {1, 1, 1, 1, 1, 1, 1};
         
 
@@ -113,7 +113,7 @@ const char* pool_digit[] =  {"0"};
 const int pool_l_digit[] =  {1};
         
 
-const char* pool_onenine[] =  {"8", "6", "7", "9", "4", "5", "3", "1", "2"};
+const char* pool_onenine[] =  {"2", "9", "1", "6", "4", "8", "3", "5", "7"};
 const int pool_l_onenine[] =  {1, 1, 1, 1, 1, 1, 1, 1, 1};
         
 
@@ -125,24 +125,24 @@ const char* pool_exp[] =  {""};
 const int pool_l_exp[] =  {0};
         
 
-const char* pool_sign[] =  {"+", "-", ""};
-const int pool_l_sign[] =  {1, 1, 0};
+const char* pool_sign[] =  {"-", "", "+"};
+const int pool_l_sign[] =  {1, 0, 1};
         
 
 const char* pool_ws[] =  {""};
 const int pool_l_ws[] =  {0};
         
 
-const char* pool_sp1[] =  {"\n", "\r", "\t", " "};
+const char* pool_sp1[] =  {" ", "\n", "\t", "\r"};
 const int pool_l_sp1[] =  {1, 1, 1, 1};
         
 
-const char* pool_symbol[] =  {",\"\":false", ",\"\":true", ",\"\":null"};
+const char* pool_symbol[] =  {",\"\":false", ",\"\":null", ",\"\":true"};
 const int pool_l_symbol[] =  {9, 8, 8};
         
 
-const char* pool_symbol_1[] =  {",null", ",true", ",false"};
-const int pool_l_symbol_1[] =  {5, 5, 6};
+const char* pool_symbol_1[] =  {",true", ",false", ",null"};
+const int pool_l_symbol_1[] =  {5, 6, 5};
         
 
 const char* pool_symbol_2[] =  {""};

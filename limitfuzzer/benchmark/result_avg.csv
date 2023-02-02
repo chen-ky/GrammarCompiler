@@ -1,5 +1,5 @@
-ori-f1-c-fuzzer,0.02
-limit-fuzzer-no-jit,0.22599999999999998
-limit-fuzzer-nr-no-jit,2.0439999999999996
-LimitFuzzer-pypy,3.0780000000000003
-LimitFuzzer-NR-pypy,3.2520000000000002
+ori-f1-c-fuzzer,0.03
+limit-fuzzer-no-jit,1.452
+limit-fuzzer-nr-no-jit,3.342
+LimitFuzzer-pypy,2.374
+LimitFuzzer-NR-pypy,2.404

@@ -4,7 +4,7 @@ REPEAT_N_TIMES=5
 RUNS=100000
 ORIGINAL_BIN_SEED=123459090
 DEPTH=10
-RAND_IN='1048576B_rand_data'
+RAND_IN='16777216B_rand_data'
 
 ORI_BIN_NAME='ori-f1-c-fuzzer'
 LIMIT_FUZZER_BIN_NAME='limit-fuzzer-no-jit'
@@ -23,10 +23,10 @@ python3 original/main.py > original/fuzzer.c
 gcc -O2 -o "$ORI_BIN_NAME" original/fuzzer.c
 
 # Build RPython recursive limitfuzzer
-# pypy ../pypy/rpython/bin/rpython --output "$LIMIT_FUZZER_BIN_NAME" rpy_limitfuzzer/main_recursive.py
+pypy ../pypy/rpython/bin/rpython --output "$LIMIT_FUZZER_BIN_NAME" rpy_limitfuzzer/main_recursive.py
 
 # Build RPython iterative limitfuzzer
-# pypy ../pypy/rpython/bin/rpython --output "$LIMIT_FUZZER_NR_BIN_NAME" rpy_limitfuzzer/main.py
+pypy ../pypy/rpython/bin/rpython --output "$LIMIT_FUZZER_NR_BIN_NAME" rpy_limitfuzzer/main.py
 
 
 echo "Running $ORI_BIN_NAME"
@@ -36,7 +36,7 @@ AVG_FILE=result_avg.csv
 echo -n '' > $RESULT_FILE
 for N in $(seq $REPEAT_N_TIMES)
 do
-    /usr/bin/time -p ./$ORI_BIN_NAME $ORIGINAL_BIN_SEED $RUNS $DEPTH 2>&1 > /dev/null | grep real | sed -e 's/real //' >> $RESULT_FILE
+    taskset -c 0 /usr/bin/time -p ./$ORI_BIN_NAME $ORIGINAL_BIN_SEED $RUNS $DEPTH 2>&1 > /dev/null | grep real | sed -e 's/real //' >> $RESULT_FILE
 done
 python -c "
 sum = 0.0
@@ -55,7 +55,7 @@ RESULT_FILE="$LIMIT_FUZZER_BIN_NAME"_result.csv
 echo -n '' > $RESULT_FILE
 for N in $(seq $REPEAT_N_TIMES)
 do
-    /usr/bin/time -p ./$LIMIT_FUZZER_BIN_NAME --runs $RUNS < $RAND_IN 2>&1 > /dev/null | grep real | sed -e 's/real //' >> $RESULT_FILE
+    taskset -c 0 /usr/bin/time -p ./$LIMIT_FUZZER_BIN_NAME --stdin-rand --runs $RUNS < $RAND_IN 2>&1 > /dev/null | grep real | sed -e 's/real //' >> $RESULT_FILE
 done
 python -c "
 sum = 0.0
@@ -74,7 +74,7 @@ RESULT_FILE="$LIMIT_FUZZER_NR_BIN_NAME"_result.csv
 echo -n '' > $RESULT_FILE
 for N in $(seq $REPEAT_N_TIMES)
 do
-    /usr/bin/time -p ./$LIMIT_FUZZER_NR_BIN_NAME --runs $RUNS < $RAND_IN 2>&1 > /dev/null | grep real | sed -e 's/real //' >> $RESULT_FILE
+    taskset -c 0 /usr/bin/time -p ./$LIMIT_FUZZER_NR_BIN_NAME --stdin-rand --runs $RUNS < $RAND_IN 2>&1 > /dev/null | grep real | sed -e 's/real //' >> $RESULT_FILE
 done
 python -c "
 sum = 0.0
@@ -93,7 +93,7 @@ RESULT_FILE="$PYPY_LIMIT_FUZZER_NAME"_result.csv
 echo -n '' > $RESULT_FILE
 for N in $(seq $REPEAT_N_TIMES)
 do
-    /usr/bin/time -p pypy $PYPY_LIMIT_FUZZER_PATH --runs $RUNS < $RAND_IN 2>&1 > /dev/null | grep real | sed -e 's/real //' >> $RESULT_FILE
+    taskset -c 0 /usr/bin/time -p pypy $PYPY_LIMIT_FUZZER_PATH --stdin-rand --runs $RUNS < $RAND_IN 2>&1 > /dev/null | grep real | sed -e 's/real //' >> $RESULT_FILE
 done
 python -c "
 sum = 0.0
@@ -111,7 +111,7 @@ RESULT_FILE="$PYPY_LIMIT_FUZZER_NR_NAME"_result.csv
 echo -n '' > $RESULT_FILE
 for N in $(seq $REPEAT_N_TIMES)
 do
-    /usr/bin/time -p pypy $PYPY_LIMIT_FUZZER_PATH --runs $RUNS < $RAND_IN 2>&1 > /dev/null | grep real | sed -e 's/real //' >> $RESULT_FILE
+    taskset -c 0 /usr/bin/time -p pypy $PYPY_LIMIT_FUZZER_PATH --stdin-rand --runs $RUNS < $RAND_IN 2>&1 > /dev/null | grep real | sed -e 's/real //' >> $RESULT_FILE
 done
 python -c "
 sum = 0.0
