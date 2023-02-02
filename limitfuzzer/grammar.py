@@ -79,7 +79,7 @@ grammar = {
     "<elements>": [["<element>"], ["<element>", ",", "<elements>"]],
     "<element>": [["<ws>", "<value>", "<ws>"]],
     "<string>": [["\"", "<characters>", "\""]],
-    "<characters>": [[""], ["<character>", "<characters>"]],
+    "<characters>": [["<empty>"], ["<character>", "<characters>"]],
     "<character>": json_character_rule,
     "<escape>": [["\""], ["\\"], ["/"], ["b"], ["f"], ["n"], ["r"], ["t"], ["u", "<hex>", "<hex>", "<hex>", "<hex>"]],
     "<hex>": [["<digit>"], ["a"], ["b"], ["c"], ["d"], ["e"], ["f"], ["A"], ["B"], ["C"], ["D"], ["E"], ["F"]],
@@ -88,8 +88,9 @@ grammar = {
     "<digits>": [["<digit>"], ["<digit>", "<digits>"]],
     "<digit>": [["0"], ["<onenine>"]],
     "<onenine>": [["1"], ["2"], ["3"], ["4"], ["5"], ["6"], ["7"], ["8"], ["9"]],
-    "<fraction>": [[""], [".", "<digits>"]],
-    "<exponent>": [[""], ["E", "<sign>", "<digits>"], ["e", "<sign>", "<digits>"]],
-    "<sign>": [[""], ["+"], ["-"]],
-    "<ws>": [[""], [" ", "<ws>"], ["\n", "<ws>"], ["\r", "<ws>"], ["\t", "<ws>"]]
+    "<fraction>": [["<empty>"], [".", "<digits>"]],
+    "<exponent>": [["<empty>"], ["E", "<sign>", "<digits>"], ["e", "<sign>", "<digits>"]],
+    "<sign>": [["<empty>"], ["+"], ["-"]],
+    "<ws>": [["<empty>"], [" ", "<ws>"], ["\n", "<ws>"], ["\r", "<ws>"], ["\t", "<ws>"]],
+    "<empty>": [[]]
 }

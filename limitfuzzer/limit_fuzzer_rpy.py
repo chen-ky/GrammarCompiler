@@ -1,11 +1,13 @@
 import os
 from rpython.rlib.rarithmetic import UINT_MAX, r_ulonglong
+# from rpython.rlib.jit import JitDriver
 from utils.random import RRandom, StdInRandom
 from utils import StrSet, TupleSorter, max_, min_
 import time
 
 INF = UINT_MAX  # Hack for float("inf") not working in RPython
 TIMESTAMP_MULTIPLIER = 1000000  # To make time.time() an integer
+# jit_driver = JitDriver(greens=["cheap_grammar", "queue"], reds=["rand"])
 
 
 class Fuzzer(object):
@@ -104,10 +106,7 @@ class LimitFuzzer_NR(LimitFuzzer):
         self.cost = self.compute_cost(grammar)
 
     def is_nt(self, name):
-        if len(name) > 1:
-            return (name[0], name[-1]) == ('<', '>')
-        else:
-            return False
+        return (name[0], name[-1]) == ('<', '>')
 
     def tree_to_str(self, tree):
         name, children = tree
@@ -150,6 +149,7 @@ class LimitFuzzer_NR(LimitFuzzer):
         root = (key, [("", [])])
         queue = [(depth, root)]
         while queue:
+            # jit_driver.jit_merge_point(cheap_grammar=cheap_grammar, queue=queue)
             # get one item to expand from the queue
             (item_depth, item) = queue.pop(0)
             key = item[0]
