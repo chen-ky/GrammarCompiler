@@ -7,7 +7,8 @@ from timeit import default_timer as timer
 
 def entry_point(argv):
     rand_from_std_in = False
-    benchmark_loop = 0
+    is_benchmark = False
+    runs = 1
     # recursive_fuzzer = False
     skip_next = False
     for i, v in enumerate(argv):
@@ -17,39 +18,40 @@ def entry_point(argv):
         arg = v.split("=", 1)
         if arg[0] == "--stdin-rand":
             rand_from_std_in = True
-        elif arg[0] == "--benchmark":
+        elif arg[0] == "--runs":
             if len(arg) < 2:
                 if i + 1 < len(argv):
-                    benchmark_loop = int(argv[i + 1])
+                    runs = int(argv[i + 1])
                     skip_next = True
                 else:
-                    eprintln("Please specify benchmark loop count.")
+                    eprintln("Please specify the number of runs.")
                     return 1
             else:
-                benchmark_loop = int(arg[1])
+                runs = int(arg[1])
+        elif arg[0] == "--benchmark":
+            is_benchmark = True
         # elif v == "--recursive":
         #     recursive_fuzzer = True
-    start_time = 0.0
-    runs = 1
-    if benchmark_loop > 0:
-        runs = benchmark_loop
-        start_time = timer()
-    elif benchmark_loop < 0:
-        eprintln("Benchmark loop cannot be negative.")
+
+    if runs <= 0:
+        eprintln("Runs must be larger than 0.")
         return 1
-    else:
-        print_("Warning: Benchmark loop is 0, not running benchmark.")
+
+    start_time = 0.0
+
+    if is_benchmark:
+        start_time = timer()
     # if recursive_fuzzer:
-    #     fuzzer = LimitFuzzer(grammar, rand_from_stdin=rand_from_std_in)
     # else:
+    # fuzzer = LimitFuzzer(grammar, rand_from_stdin=rand_from_std_in)
     fuzzer = LimitFuzzer_NR(grammar, rand_from_stdin=rand_from_std_in)
     while runs > 0:
         fuzz_result = fuzzer.fuzz()
         write_bytes_to_stdout(fuzz_result)
         runs -= 1
-    if benchmark_loop > 0:
+    if is_benchmark:
         end_time = timer()
-        print_("Runtime: %f seconds" % (end_time - start_time))
+        print_("\nRuntime: %f seconds" % (end_time - start_time))
     return 0
 
 
