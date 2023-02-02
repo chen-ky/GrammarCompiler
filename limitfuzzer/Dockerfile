@@ -1,7 +1,7 @@
 FROM docker.io/library/fedora:latest
 
 RUN dnf update -y \
-    && dnf install -y gcc python2 pypy mercurial bzip2
+    && dnf install -y gcc python2 pypy mercurial
 
 RUN useradd -m -U user
 
