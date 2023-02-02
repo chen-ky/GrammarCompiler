@@ -60,10 +60,7 @@ class LimitFuzzer(LimitFuzzer):
 # A non recursive version.
 class LimitFuzzer_NR(LimitFuzzer):
     def is_nt(self, name):
-        if len(name) > 1:
-            return (name[0], name[-1]) == ('<', '>')
-        else:
-            return False
+        return (name[0], name[-1]) == ('<', '>')
 
     def tree_to_str(self, tree):
         name, children = tree
