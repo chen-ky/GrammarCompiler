@@ -4,7 +4,7 @@ set datafile separator ","
 
 # set xlabel ''
 set ylabel 'Time taken (seconds)'
-set title 'Time taken to generate 100000 JSON (Average of 5 runs)'
+set title 'Time taken to generate 100000 JSON (Average of 100 runs)'
 set yrange [0:*]
 set style fill solid
 set boxwidth 0.5
